@@ -11,6 +11,7 @@
 		E9A5759F24A6992E00A2C50F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A5759E24A6992D00A2C50F /* OpenGL.framework */; };
 		E9A575A124A6998B00A2C50F /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A575A024A6998B00A2C50F /* libGLEW.2.1.0.dylib */; };
 		E9A575A324A699E100A2C50F /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A575A224A699E100A2C50F /* libglfw.3.3.dylib */; };
+		E9A575AC24A6A1FA00A2C50F /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A575AB24A6A1FA00A2C50F /* glad.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,9 @@
 		E9A5759E24A6992D00A2C50F /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		E9A575A024A6998B00A2C50F /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../usr/local/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
 		E9A575A224A699E100A2C50F /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../usr/local/Cellar/glfw/3.3.2/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
+		E9A575A824A6A1E200A2C50F /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
+		E9A575AA24A6A1E200A2C50F /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
+		E9A575AB24A6A1FA00A2C50F /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +54,7 @@
 		E9A5758A24A6983D00A2C50F = {
 			isa = PBXGroup;
 			children = (
+				E9A575A624A6A1E200A2C50F /* include */,
 				E9A5759524A6983D00A2C50F /* src */,
 				E9A5759424A6983D00A2C50F /* Products */,
 				E9A5759D24A6992D00A2C50F /* Frameworks */,
@@ -67,6 +72,7 @@
 		E9A5759524A6983D00A2C50F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E9A575AB24A6A1FA00A2C50F /* glad.c */,
 				E9A575A424A69B3E00A2C50F /* cpp */,
 			);
 			path = src;
@@ -88,6 +94,31 @@
 				E9A5759624A6983D00A2C50F /* main.cpp */,
 			);
 			path = cpp;
+			sourceTree = "<group>";
+		};
+		E9A575A624A6A1E200A2C50F /* include */ = {
+			isa = PBXGroup;
+			children = (
+				E9A575A724A6A1E200A2C50F /* KHR */,
+				E9A575A924A6A1E200A2C50F /* glad */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		E9A575A724A6A1E200A2C50F /* KHR */ = {
+			isa = PBXGroup;
+			children = (
+				E9A575A824A6A1E200A2C50F /* khrplatform.h */,
+			);
+			path = KHR;
+			sourceTree = "<group>";
+		};
+		E9A575A924A6A1E200A2C50F /* glad */ = {
+			isa = PBXGroup;
+			children = (
+				E9A575AA24A6A1E200A2C50F /* glad.h */,
+			);
+			path = glad;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9A5759724A6983D00A2C50F /* main.cpp in Sources */,
+				E9A575AC24A6A1FA00A2C50F /* glad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
