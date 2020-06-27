@@ -5,10 +5,79 @@
 //  Created by Thomas Buffard on 6/26/20.
 //
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include <iostream>
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow *window);
+
+// variables
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    // Initialize GLFW
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    
+    // Create GLFW window object
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    if (window == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+    
+    // Register framebuffer_size_callback function with window resizing
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    
+    // Make sure GLAD is initialized
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
+    
+    // Render loop
+    // Check if window has been instructed to close
+    while(!glfwWindowShouldClose(window))
+    {
+        // Process input
+        processInput(window);
+        
+        // Rendering commands
+        // Clear color
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // State setting function
+        glClear(GL_COLOR_BUFFER_BIT);           // State using function
+        
+        // Check for event triggers and swap buffers
+        glfwPollEvents();
+        glfwSwapBuffers(window);
+    }
+    
+    // Clean all the GLFW resources
+    glfwTerminate();
     return 0;
+}
+
+// Function called when the window is resized
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    // Set the viewport window
+    glViewport(0, 0, width, height);
+}
+
+// Function to process input
+void processInput(GLFWwindow* window)
+{
+    // Close the window when user presses escape
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
 }
