@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E9A5759724A6983D00A2C50F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A5759624A6983D00A2C50F /* main.cpp */; };
+		E9A5759724A6983D00A2C50F /* triangles_1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A5759624A6983D00A2C50F /* triangles_1.cpp */; };
 		E9A5759F24A6992E00A2C50F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A5759E24A6992D00A2C50F /* OpenGL.framework */; };
 		E9A575A124A6998B00A2C50F /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A575A024A6998B00A2C50F /* libGLEW.2.1.0.dylib */; };
 		E9A575A324A699E100A2C50F /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E9A575A224A699E100A2C50F /* libglfw.3.3.dylib */; };
 		E9A575AC24A6A1FA00A2C50F /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A575AB24A6A1FA00A2C50F /* glad.c */; };
+		E9A575AE24A8379B00A2C50F /* triangles_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A575AD24A8379B00A2C50F /* triangles_2.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,13 +29,14 @@
 
 /* Begin PBXFileReference section */
 		E9A5759324A6983D00A2C50F /* OpenGL Practice */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "OpenGL Practice"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E9A5759624A6983D00A2C50F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E9A5759624A6983D00A2C50F /* triangles_1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = triangles_1.cpp; sourceTree = "<group>"; };
 		E9A5759E24A6992D00A2C50F /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		E9A575A024A6998B00A2C50F /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../usr/local/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
 		E9A575A224A699E100A2C50F /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../usr/local/Cellar/glfw/3.3.2/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
 		E9A575A824A6A1E200A2C50F /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
 		E9A575AA24A6A1E200A2C50F /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
 		E9A575AB24A6A1FA00A2C50F /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
+		E9A575AD24A8379B00A2C50F /* triangles_2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = triangles_2.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +93,8 @@
 		E9A575A424A69B3E00A2C50F /* cpp */ = {
 			isa = PBXGroup;
 			children = (
-				E9A5759624A6983D00A2C50F /* main.cpp */,
+				E9A5759624A6983D00A2C50F /* triangles_1.cpp */,
+				E9A575AD24A8379B00A2C50F /* triangles_2.cpp */,
 			);
 			path = cpp;
 			sourceTree = "<group>";
@@ -177,7 +180,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9A5759724A6983D00A2C50F /* main.cpp in Sources */,
+				E9A5759724A6983D00A2C50F /* triangles_1.cpp in Sources */,
+				E9A575AE24A8379B00A2C50F /* triangles_2.cpp in Sources */,
 				E9A575AC24A6A1FA00A2C50F /* glad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
