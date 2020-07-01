@@ -17,6 +17,7 @@
 		E9A5760B24ABE5D000A2C50F /* shaders_practice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A5760A24ABE5D000A2C50F /* shaders_practice.cpp */; };
 		E9A5761024AD0DB200A2C50F /* textures_practice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A5760F24AD0DB200A2C50F /* textures_practice.cpp */; };
 		E9A5761624AD165B00A2C50F /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A5761424AD165B00A2C50F /* stb_image.cpp */; };
+		E9A5761C24AD2BAE00A2C50F /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A5761A24AD2BAE00A2C50F /* texture.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,6 +55,8 @@
 		E9A5761724AD16AF00A2C50F /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
 		E9A5761824AD1B5100A2C50F /* shader_2.fragment */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader_2.fragment; sourceTree = "<group>"; };
 		E9A5761924AD282400A2C50F /* wooden_box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wooden_box.png; sourceTree = "<group>"; };
+		E9A5761A24AD2BAE00A2C50F /* texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = texture.cpp; sourceTree = "<group>"; };
+		E9A5761B24AD2BAE00A2C50F /* texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = texture.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +158,7 @@
 				E9A5760724ABDC5200A2C50F /* shader.cpp */,
 				E9A5760A24ABE5D000A2C50F /* shaders_practice.cpp */,
 				E9A5760F24AD0DB200A2C50F /* textures_practice.cpp */,
+				E9A5761A24AD2BAE00A2C50F /* texture.cpp */,
 			);
 			path = cpp;
 			sourceTree = "<group>";
@@ -162,6 +166,7 @@
 		E9A5760624ABD2F300A2C50F /* hpp */ = {
 			isa = PBXGroup;
 			children = (
+				E9A5761B24AD2BAE00A2C50F /* texture.h */,
 				E9A5760824ABDC5200A2C50F /* shader.h */,
 			);
 			path = hpp;
@@ -247,6 +252,7 @@
 				E9A5761624AD165B00A2C50F /* stb_image.cpp in Sources */,
 				E9A575AE24A8379B00A2C50F /* triangles_2.cpp in Sources */,
 				E9A575AC24A6A1FA00A2C50F /* glad.c in Sources */,
+				E9A5761C24AD2BAE00A2C50F /* texture.cpp in Sources */,
 				E9A5761024AD0DB200A2C50F /* textures_practice.cpp in Sources */,
 				E9A5760B24ABE5D000A2C50F /* shaders_practice.cpp in Sources */,
 			);
