@@ -32,7 +32,7 @@ private:
     void checkCompileErrors(unsigned int shader, std::string type);
 };
 
-#endif 
+#endif
 */
 
 #ifndef SHADER_H

@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <cmath>
 
 #include "shader.h"
 
@@ -20,6 +21,7 @@ void processInput(GLFWwindow *window);
 // variables
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+const float offset = 0.2f;
 
 
 int main(int argc, const char * argv[]) {
@@ -52,19 +54,19 @@ int main(int argc, const char * argv[]) {
     
     Shader shaderProgram("shaders/shader_1.vertex", "shaders/shader_1.fragment");
     
-    // Rectangle
+    // Vertex inputs
     // Triangle 1
     float firstTri[] = {
-         -0.5f, 0.5f, 0.0f,
-         -0.5f, 0.0f, 0.0f,
-         -0.1f, 0.0f, 0.0f
+        -0.5f, 0.5f, 0.0f,     1.0f, 0.0f, 0.0f,
+        -0.5f, 0.0f, 0.0f,     0.0f, 1.0f, 0.0f,
+        -0.1f, 0.0f, 0.0f,     0.0f, 0.0f, 1.0f
     };
     
     // Triangle 2
     float secondTri[] = {
-        0.1f, 0.0f, 0.0f,
-        0.5f, 0.5f, 0.0f,
-        0.5f, 0.0f, 0.0f
+        0.1f, 0.0f, 0.0f,       0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, 0.0f,       0.0f, 1.0f, 0.0f,
+        0.5f, 0.0f, 0.0f,       1.0f, 0.0f, 0.0f
     };
     
     // Initialize Vertex Buffer Object, Vertex Array Object,
@@ -72,18 +74,28 @@ int main(int argc, const char * argv[]) {
     unsigned int VBO[2], VAO[2];
     glGenBuffers(2, VBO);
     glGenVertexArrays(2, VAO);
+    
     // First triangle
     glBindVertexArray(VAO[0]);
     glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(firstTri), firstTri, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
+    
     // Second triangle
     glBindVertexArray(VAO[1]);
     glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(secondTri), secondTri, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // position atribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
     
     // Wireframe
 //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -100,16 +112,28 @@ int main(int argc, const char * argv[]) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // State setting function
         glClear(GL_COLOR_BUFFER_BIT);           // State using function
         
+        // Get triangle color
+//        float timeValue = glfwGetTime();
+//        float greenValue = (sin(timeValue) / 2.0f) +0.5f;
+        
         // Render triangle
         // Activate program
         shaderProgram.use();
-        //shaderProgram.setFloat("uniform",  1.0f);
+        
+        // set offset
+        shaderProgram.setFloat("xOffset", offset);
+                
+        // Set color
+//        shaderProgram.setFloat("ourColor", greenValue);
+        
         // First triangle
         glBindVertexArray(VAO[0]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
+        
         // Second triangle yellow
         glBindVertexArray(VAO[1]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
+        
         glBindVertexArray(0);
         
         // Check for event triggers and swap buffers
