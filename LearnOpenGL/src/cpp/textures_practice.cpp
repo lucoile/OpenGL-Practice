@@ -12,6 +12,7 @@
 
 #include "shader.h"
 #include "stb_image.h"
+#include "texture.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -49,7 +50,7 @@ int main(int argc, const char * argv[]) {
         return -1;
     }
     
-    Shader shaderProgram("shaders/shader_2.vertex", "shaders/shader_2.fragment");
+    Shader shaderProgram("shaders/shader_2.vert", "shaders/shader_2.frag");
     
     // ------------------------------------- //
     // Vertex inputs
@@ -99,39 +100,7 @@ int main(int argc, const char * argv[]) {
     
     // ------------------------------------- //
     // Texture
-    // Create and bind texture object
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    
-    // Set texture options
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);    // set texture wrapping to GL_REPEAT (default wrapping method)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    // Load image
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load("textures/wooden_box.png", &width, &height, &nrChannels, 0);
-    
-    // Generate tecture
-    if (data)
-    {
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    
-    // Free texture memory
-    stbi_image_free(data);
-    
-    
+    Texture boxTex("//Users//thomas//Documents//OpenGL Practice//LearnOpenGL//src//textures//container.jpg");
     
     
     // ------------------------------------- //
@@ -151,7 +120,8 @@ int main(int argc, const char * argv[]) {
         // Activate and bind texture
         glActiveTexture(GL_TEXTURE0);
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texture);
+//        glBindTexture(GL_TEXTURE_2D, texture);
+        boxTex.bind();
         
         // Draw rectangle
         shaderProgram.use();
