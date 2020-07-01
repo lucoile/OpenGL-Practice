@@ -5,7 +5,7 @@
 //  Created by Thomas Buffard on 6/30/20.
 //
 
-
+/*
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -164,3 +164,4 @@ void processInput(GLFWwindow* window)
         glfwSetWindowShouldClose(window, true);
 }
 
+*/

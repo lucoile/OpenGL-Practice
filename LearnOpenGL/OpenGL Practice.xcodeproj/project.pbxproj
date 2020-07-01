@@ -15,6 +15,8 @@
 		E9A575AE24A8379B00A2C50F /* triangles_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A575AD24A8379B00A2C50F /* triangles_2.cpp */; };
 		E9A5760924ABDC5200A2C50F /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A5760724ABDC5200A2C50F /* shader.cpp */; };
 		E9A5760B24ABE5D000A2C50F /* shaders_practice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A5760A24ABE5D000A2C50F /* shaders_practice.cpp */; };
+		E9A5761024AD0DB200A2C50F /* textures_practice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A5760F24AD0DB200A2C50F /* textures_practice.cpp */; };
+		E9A5761624AD165B00A2C50F /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9A5761424AD165B00A2C50F /* stb_image.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,6 +46,14 @@
 		E9A5760724ABDC5200A2C50F /* shader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shader.cpp; sourceTree = "<group>"; };
 		E9A5760824ABDC5200A2C50F /* shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
 		E9A5760A24ABE5D000A2C50F /* shaders_practice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shaders_practice.cpp; sourceTree = "<group>"; };
+		E9A5760E24AD0D0B00A2C50F /* shader_2.vertex */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader_2.vertex; sourceTree = "<group>"; };
+		E9A5760F24AD0DB200A2C50F /* textures_practice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = textures_practice.cpp; sourceTree = "<group>"; };
+		E9A5761224AD124E00A2C50F /* wall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wall.jpg; sourceTree = "<group>"; };
+		E9A5761424AD165B00A2C50F /* stb_image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stb_image.cpp; sourceTree = "<group>"; };
+		E9A5761524AD165B00A2C50F /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		E9A5761724AD16AF00A2C50F /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
+		E9A5761824AD1B5100A2C50F /* shader_2.fragment */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader_2.fragment; sourceTree = "<group>"; };
+		E9A5761924AD282400A2C50F /* wooden_box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wooden_box.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +91,7 @@
 		E9A5759524A6983D00A2C50F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E9A5761124AD124400A2C50F /* textures */,
 				E9A5760524ABD2E200A2C50F /* cpp */,
 				E9A5760624ABD2F300A2C50F /* hpp */,
 				E9A575FB24ABCE2600A2C50F /* shaders */,
@@ -101,6 +112,7 @@
 		E9A575A624A6A1E200A2C50F /* include */ = {
 			isa = PBXGroup;
 			children = (
+				E9A5761324AD163600A2C50F /* stb */,
 				E9A575A724A6A1E200A2C50F /* KHR */,
 				E9A575A924A6A1E200A2C50F /* glad */,
 			);
@@ -129,6 +141,8 @@
 			children = (
 				E9A5760024ABCF8F00A2C50F /* shader_1.vertex */,
 				E9A5760124ABD07B00A2C50F /* shader_1.fragment */,
+				E9A5760E24AD0D0B00A2C50F /* shader_2.vertex */,
+				E9A5761824AD1B5100A2C50F /* shader_2.fragment */,
 			);
 			path = shaders;
 			sourceTree = "<group>";
@@ -140,6 +154,7 @@
 				E9A575AD24A8379B00A2C50F /* triangles_2.cpp */,
 				E9A5760724ABDC5200A2C50F /* shader.cpp */,
 				E9A5760A24ABE5D000A2C50F /* shaders_practice.cpp */,
+				E9A5760F24AD0DB200A2C50F /* textures_practice.cpp */,
 			);
 			path = cpp;
 			sourceTree = "<group>";
@@ -150,6 +165,25 @@
 				E9A5760824ABDC5200A2C50F /* shader.h */,
 			);
 			path = hpp;
+			sourceTree = "<group>";
+		};
+		E9A5761124AD124400A2C50F /* textures */ = {
+			isa = PBXGroup;
+			children = (
+				E9A5761724AD16AF00A2C50F /* container.jpg */,
+				E9A5761224AD124E00A2C50F /* wall.jpg */,
+				E9A5761924AD282400A2C50F /* wooden_box.png */,
+			);
+			path = textures;
+			sourceTree = "<group>";
+		};
+		E9A5761324AD163600A2C50F /* stb */ = {
+			isa = PBXGroup;
+			children = (
+				E9A5761424AD165B00A2C50F /* stb_image.cpp */,
+				E9A5761524AD165B00A2C50F /* stb_image.h */,
+			);
+			path = stb;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,8 +244,10 @@
 			files = (
 				E9A5760924ABDC5200A2C50F /* shader.cpp in Sources */,
 				E9A5759724A6983D00A2C50F /* triangles_1.cpp in Sources */,
+				E9A5761624AD165B00A2C50F /* stb_image.cpp in Sources */,
 				E9A575AE24A8379B00A2C50F /* triangles_2.cpp in Sources */,
 				E9A575AC24A6A1FA00A2C50F /* glad.c in Sources */,
+				E9A5761024AD0DB200A2C50F /* textures_practice.cpp in Sources */,
 				E9A5760B24ABE5D000A2C50F /* shaders_practice.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
