@@ -7,6 +7,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 #include <stdio.h>
 
@@ -49,7 +50,6 @@ int main(int argc, const char * argv[]) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    
     
     
     // ------------------------------------- //
@@ -117,6 +117,14 @@ int main(int argc, const char * argv[]) {
     shaderProgram.use();
     shaderProgram.setInt("texture1", 0);
     shaderProgram.setInt("texture2", 1);
+    
+    
+    
+    // Transforms
+//    glm::mat4 trans = glm::mat4(1.0f);
+//    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+//    trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+    
     
     // Check if window has been instructed to close
     while(!glfwWindowShouldClose(window))

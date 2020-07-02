@@ -73,6 +73,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E93B478624AD813900120B0B /* glm */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = glm;
+			sourceTree = "<group>";
+		};
 		E9A5758A24A6983D00A2C50F = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +122,7 @@
 		E9A575A624A6A1E200A2C50F /* include */ = {
 			isa = PBXGroup;
 			children = (
+				E93B478624AD813900120B0B /* glm */,
 				E9A5761324AD163600A2C50F /* stb */,
 				E9A575A724A6A1E200A2C50F /* KHR */,
 				E9A575A924A6A1E200A2C50F /* glad */,
