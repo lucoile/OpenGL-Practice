@@ -50,7 +50,13 @@ int main(int argc, const char * argv[]) {
         return -1;
     }
     
+    
+    
+    // ------------------------------------- //
+    // Shader
     Shader shaderProgram("shaders/shader_2.vert", "shaders/shader_2.frag");
+    
+    
     
     // ------------------------------------- //
     // Vertex inputs
@@ -89,8 +95,9 @@ int main(int argc, const char * argv[]) {
     // color attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    // tecture attribute
+    // texture attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
     
     
     // Wireframe
@@ -99,12 +106,18 @@ int main(int argc, const char * argv[]) {
     
     
     // ------------------------------------- //
-    // Texture
-    Texture boxTex("//Users//thomas//Documents//OpenGL Practice//LearnOpenGL//src//textures//container.jpg");
+    // Textures
+    Texture boxTex("textures/container.jpg");
+    Texture wallTex("textures/wall.jpg");
     
     
     // ------------------------------------- //
     // Render loop
+    //Activate shaders
+    shaderProgram.use();
+    shaderProgram.setInt("texture1", 0);
+    shaderProgram.setInt("texture2", 1);
+    
     // Check if window has been instructed to close
     while(!glfwWindowShouldClose(window))
     {
@@ -120,11 +133,12 @@ int main(int argc, const char * argv[]) {
         // Activate and bind texture
         glActiveTexture(GL_TEXTURE0);
         glEnable(GL_TEXTURE_2D);
-//        glBindTexture(GL_TEXTURE_2D, texture);
         boxTex.bind();
+        glActiveTexture(GL_TEXTURE1);
+        glEnable(GL_TEXTURE_2D);
+        wallTex.bind();
         
         // Draw rectangle
-        shaderProgram.use();
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
                 
