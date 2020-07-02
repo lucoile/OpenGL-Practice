@@ -16,15 +16,12 @@
 #include "hpp/texture.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
+void processInput(GLFWwindow *window, Shader shaderProgram);
 
 
 // variables
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-const float rotationSpeed = 5.0;
-float lastFrameTime;
-float angle = 45.0f;
 
 int main(int argc, const char * argv[]) {
     // Initialize GLFW
@@ -53,8 +50,18 @@ int main(int argc, const char * argv[]) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    
-    
+
+    // Enable backface culling
+    //glEnable(GL_CULL_FACE);
+
+    // ------------------------------------- //
+    // Variables
+    const float rotationSpeed = 5.0f;
+    float lastFrameTime = glfwGetTime();
+    float angle = 45.0f;
+
+
+
     // ------------------------------------- //
     // Shader
     Shader shaderProgram("src/shaders/shader_2.vert", "src/shaders/shader_2.frag");
@@ -121,19 +128,11 @@ int main(int argc, const char * argv[]) {
     shaderProgram.setInt("texture1", 0);
     shaderProgram.setInt("texture2", 1);
     
-    
-    
-    // Transforms
-//    glm::mat4 trans = glm::mat4(1.0f);
-//    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-//    trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-    
-    
     // Check if window has been instructed to close
     while(!glfwWindowShouldClose(window))
     {
         // Process input
-        processInput(window);
+        processInput(window, shaderProgram);
         
         // Rendering commands
         // Clear color
@@ -176,7 +175,7 @@ int main(int argc, const char * argv[]) {
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        
+
         // Check for event triggers and swap buffers
         glfwPollEvents();
         glfwSwapBuffers(window);
@@ -203,10 +202,28 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 
 // Function to process input
-void processInput(GLFWwindow* window)
+void processInput(GLFWwindow* window, Shader shaderProgram)
 {
     // Close the window when user presses escape
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+    // Camera 1 centered at the origin
+    if(glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+    {
+        glm::mat4 viewMatrix = glm::mat4(1.0f);
+        GLuint viewMatrixLocation = glGetUniformLocation(shaderProgram.ID, "viewMatrix");
+        glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
+    }
+
+    // Camera 2 to the left
+    if(glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+    {
+        glm::mat4 viewMatrix = glm::lookAt(glm::vec3(-0.5f, 0.0f, 0.0f),
+                                           glm::vec3(-0.5f, 0.0f,-1.0f),
+                                           glm::vec3( 0.0f, 1.0f, 0.0f) );
+        GLuint viewMatrixLocation = glGetUniformLocation(shaderProgram.ID, "viewMatrix");
+        glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
+    }
 }
 

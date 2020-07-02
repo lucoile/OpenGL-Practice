@@ -8,10 +8,11 @@ out vec4 vertexColor;
 out vec2 TexCoord;
 
 uniform mat4 worldMatrix;
+uniform mat4 viewMatrix = mat4(1.0f);
 
 void main()
 {
-    gl_Position = worldMatrix * vec4(aPos, 1.0f);
+    gl_Position = viewMatrix * worldMatrix * vec4(aPos, 1.0f);
     vertexColor = vec4(aColor, 1.0f);
     TexCoord = aTexCoord;
 }
