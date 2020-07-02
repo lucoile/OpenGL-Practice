@@ -22,6 +22,9 @@ void processInput(GLFWwindow *window);
 // variables
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+const float rotationSpeed = 1.0;
+float lastFrameTime = 0.0f;
+float angle = 0.0f;
 
 int main(int argc, const char * argv[]) {
     // Initialize GLFW
@@ -138,6 +141,7 @@ int main(int argc, const char * argv[]) {
         glClear(GL_COLOR_BUFFER_BIT);           // State using function
         
         // Render
+        shaderProgram.use();
         // Activate and bind texture
         glActiveTexture(GL_TEXTURE0);
         glEnable(GL_TEXTURE_2D);
@@ -145,6 +149,17 @@ int main(int argc, const char * argv[]) {
         glActiveTexture(GL_TEXTURE1);
         glEnable(GL_TEXTURE_2D);
         wallTex.bind();
+        
+        // Calculate world matrix
+        float dt = glfwGetTime() - lastFrameTime;
+        lastFrameTime += dt;
+        
+        //angle = (angle + rotationSpeed * dt);
+        angle = 45.0f;
+        glm::mat4 trans = glm::mat4(1.0f);
+        glm::mat4 rotationMatrix = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+        GLuint worldMatrixLocation = glGetUniformLocation(shaderProgram.ID, "worldMatrix");
+        glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
         
         // Draw rectangle
         glBindVertexArray(VAO);
