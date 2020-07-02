@@ -225,5 +225,21 @@ void processInput(GLFWwindow* window, Shader shaderProgram)
         GLuint viewMatrixLocation = glGetUniformLocation(shaderProgram.ID, "viewMatrix");
         glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, &viewMatrix[0][0]);
     }
+
+    // Camera 3 perspective
+    if(glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+    {
+        glm::mat4 projectionMatrix = glm::perspective(70.0f, 800.0f / 600.0f, 0.01f, 100.0f);
+        GLuint projectionMatrixLocation = glGetUniformLocation(shaderProgram.ID, "projectionMatrix");
+        glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
+    }
+
+    // Camera 4 orthographic
+    if(glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+    {
+        glm::mat4 projectionMatrix = glm::ortho(-4.0f, 4.0f, -3.0f, 3.0f, -100.0f, 100.0f);
+        GLuint projectionMatrixLocation = glGetUniformLocation(shaderProgram.ID, "projectionMatrix");
+        glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
+    }
 }
 
