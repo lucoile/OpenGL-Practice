@@ -22,9 +22,9 @@ void processInput(GLFWwindow *window);
 // variables
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-const float rotationSpeed = 1.0;
-float lastFrameTime = 0.0f;
-float angle = 0.0f;
+const float rotationSpeed = 5.0;
+float lastFrameTime;
+float angle = 45.0f;
 
 int main(int argc, const char * argv[]) {
     // Initialize GLFW
@@ -156,15 +156,27 @@ int main(int argc, const char * argv[]) {
         
         angle = (angle + rotationSpeed * dt);
         //angle = 45.0f;
-        glm::mat4 trans = glm::mat4(1.0f);
-        glm::mat4 rotationMatrix = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+        //glm::mat4 trans = glm::mat4(1.0f);
+        glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, -0.5f, 0.0f));
+        glm::mat4 rotationMatrix = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
         GLuint worldMatrixLocation = glGetUniformLocation(shaderProgram.ID, "worldMatrix");
         glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
         
         // Draw rectangle
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-                
+
+        // top right rectangle
+        trans = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, 0.5f, 0.0f));
+        glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.25f, -0.25f, 0.25f));
+        glm::mat4 worldMatrix = trans * scaleMatrix;
+        glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &worldMatrix[0][0]);
+
+        // Draw rectangle
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        
         // Check for event triggers and swap buffers
         glfwPollEvents();
         glfwSwapBuffers(window);
