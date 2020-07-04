@@ -22,6 +22,7 @@ void processInput(GLFWwindow *window, Shader shaderProgram);
 // variables
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+glm::mat4 movementMatrix = glm::mat4(1.0f);
 
 int main(int argc, const char * argv[]) {
     // Initialize GLFW
@@ -240,6 +241,36 @@ void processInput(GLFWwindow* window, Shader shaderProgram)
         glm::mat4 projectionMatrix = glm::ortho(-4.0f, 4.0f, -3.0f, 3.0f, -100.0f, 100.0f);
         GLuint projectionMatrixLocation = glGetUniformLocation(shaderProgram.ID, "projectionMatrix");
         glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &projectionMatrix[0][0]);
+    }
+
+    // Camera movement controls
+    // A: move left
+    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        movementMatrix = glm::translate(movementMatrix, glm::vec3(0.005f, 0.0f, 0.0f));
+        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
+        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+    }
+    // S: move up
+    if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        movementMatrix = glm::translate(movementMatrix, glm::vec3(0.0f, 0.005f, 0.0f));
+        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
+        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+    }
+    // D: move right
+    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        movementMatrix = glm::translate(movementMatrix, glm::vec3(-0.005f, 0.0f, 0.0f));
+        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
+        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+    }
+    // W: move down
+    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        movementMatrix = glm::translate(movementMatrix, glm::vec3(0.0f, -0.005f, 0.0f));
+        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
+        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
     }
 }
 
