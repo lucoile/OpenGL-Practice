@@ -8,6 +8,7 @@ add_executable(main
         src/cpp/textures_practice.cpp
         src/cpp/shader.cpp
         src/cpp/texture.cpp
+        src/cpp/camera.cpp
         )
 set_property(TARGET main PROPERTY CXX_STANDARD 11)
 target_compile_options(main PRIVATE -Wall)

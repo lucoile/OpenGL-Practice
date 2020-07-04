@@ -11,10 +11,12 @@ uniform mat4 worldMatrix;
 uniform mat4 viewMatrix = mat4(1.0f);
 uniform mat4 projectionMatrix = mat4(1.0f);
 uniform mat4 movementMatrix = mat4(1.0f);
+uniform float movementSpeed = 1.0f;
 
 void main()
 {
-    gl_Position = movementMatrix * projectionMatrix * viewMatrix * worldMatrix * vec4(aPos, 1.0f);
+    mat4 movementMatrixAdjusted = movementSpeed * movementMatrix;
+    gl_Position = movementMatrixAdjusted * projectionMatrix * viewMatrix * worldMatrix * vec4(aPos, 1.0f);
     vertexColor = vec4(aColor, 1.0f);
     TexCoord = aTexCoord;
 }

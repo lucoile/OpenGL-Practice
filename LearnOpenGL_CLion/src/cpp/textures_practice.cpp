@@ -272,5 +272,11 @@ void processInput(GLFWwindow* window, Shader shaderProgram)
         GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
         glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
     }
+
+    // Shift to speed up camera movement
+    if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    {
+        shaderProgram.setFloat("movementSpeed", 2.0f);
+    }
 }
 
