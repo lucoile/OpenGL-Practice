@@ -9,20 +9,25 @@
 #include <GLFW/glfw3.h>
 #include <glm/ext.hpp>
 
-#include <stdio.h>
+#include <iostream>
 
 #include "hpp/shader.h"
 #include "stb/stb_image.h"
 #include "hpp/texture.h"
+#include "hpp/camera.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window, Shader shaderProgram);
+void processInput(GLFWwindow *window, Shader shaderProgram, Camera camera, float frametime);
 
 
 // variables
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 glm::mat4 movementMatrix = glm::mat4(1.0f);
+glm::vec2 rotation = glm::vec2(0.0f);;
+glm::vec3 direction = glm::vec3(0.0f);
+
+
 
 int main(int argc, const char * argv[]) {
     // Initialize GLFW
@@ -58,16 +63,20 @@ int main(int argc, const char * argv[]) {
     // ------------------------------------- //
     // Variables
     const float rotationSpeed = 5.0f;
-    float lastFrameTime = glfwGetTime();
     float angle = 45.0f;
+    float lastFrameTime = glfwGetTime();
 
 
 
     // ------------------------------------- //
     // Shader
     Shader shaderProgram("src/shaders/shader_2.vert", "src/shaders/shader_2.frag");
-    
-    
+
+
+    // ------------------------------------- //
+    // Camera
+    Camera camera;
+
     
     // ------------------------------------- //
     // Vertex inputs
@@ -132,8 +141,12 @@ int main(int argc, const char * argv[]) {
     // Check if window has been instructed to close
     while(!glfwWindowShouldClose(window))
     {
+        // Get frame time
+        float dt = glfwGetTime() - lastFrameTime;
+        lastFrameTime += dt;
+
         // Process input
-        processInput(window, shaderProgram);
+        processInput(window, shaderProgram, camera, lastFrameTime);
         
         // Rendering commands
         // Clear color
@@ -149,11 +162,8 @@ int main(int argc, const char * argv[]) {
         glActiveTexture(GL_TEXTURE1);
         glEnable(GL_TEXTURE_2D);
         wallTex.bind();
-        
+
         // Calculate world matrix
-        float dt = glfwGetTime() - lastFrameTime;
-        lastFrameTime += dt;
-        
         angle = (angle + rotationSpeed * dt);
         //angle = 45.0f;
         //glm::mat4 trans = glm::mat4(1.0f);
@@ -203,7 +213,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 
 // Function to process input
-void processInput(GLFWwindow* window, Shader shaderProgram)
+void processInput(GLFWwindow* window, Shader shaderProgram, Camera camera, float frametime)
 {
     // Close the window when user presses escape
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -247,36 +257,66 @@ void processInput(GLFWwindow* window, Shader shaderProgram)
     // A: move left
     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        movementMatrix = glm::translate(movementMatrix, glm::vec3(0.005f, 0.0f, 0.0f));
-        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
-        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+//        movementMatrix = glm::translate(movementMatrix, glm::vec3(0.005f, 0.0f, 0.0f));
+//        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
+//        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+
+        direction.y = 1.f;
+        camera.move(direction, rotation, frametime);
     }
     // S: move up
     if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        movementMatrix = glm::translate(movementMatrix, glm::vec3(0.0f, 0.005f, 0.0f));
-        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
-        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+//        movementMatrix = glm::translate(movementMatrix, glm::vec3(0.0f, 0.005f, 0.0f));
+//        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
+//        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+
+        direction.x = -1.f;
+        camera.move(direction, rotation, frametime);
+//        camera.move(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f), frametime);
     }
     // D: move right
     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        movementMatrix = glm::translate(movementMatrix, glm::vec3(-0.005f, 0.0f, 0.0f));
-        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
-        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+//        movementMatrix = glm::translate(movementMatrix, glm::vec3(-0.005f, 0.0f, 0.0f));
+//        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
+//        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+
+        direction.y = -1.f;
+        camera.move(direction, rotation, frametime);
+//        camera.move(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f), frametime);
     }
     // W: move down
     if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        movementMatrix = glm::translate(movementMatrix, glm::vec3(0.0f, -0.005f, 0.0f));
-        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
-        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+//        movementMatrix = glm::translate(movementMatrix, glm::vec3(0.0f, -0.005f, 0.0f));
+//        GLuint  movementMatrixLocation = glGetUniformLocation(shaderProgram.ID, "movementMatrix");
+//        glUniformMatrix4fv(movementMatrixLocation, 1, GL_FALSE, &movementMatrix[0][0]);
+
+        direction.x = 1.f;
+        camera.move(direction, rotation, frametime);
+//        camera.move(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f), frametime);
     }
 
-    // Shift to speed up camera movement
-    if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    if(glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
     {
-        shaderProgram.setFloat("movementSpeed", 2.0f);
+        direction.z = -1.f;
+        camera.move(direction, rotation, frametime);
     }
+    if(glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+    {
+        direction.z = 1.f;
+        camera.move(direction, rotation, frametime);
+    }
+
+//    // Shift to speed up camera movement
+//    if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+//    {
+//        shaderProgram.setFloat("movementSpeed", 2.0f);
+//    }
+
+    // Update camera
+//    std::cout << direction.x << ", " << direction.y << ", " << direction.z << "\n";
+    //direction = glm::vec3(0.0f);
 }
 
