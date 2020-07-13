@@ -5,10 +5,10 @@ project (COMP371)
 # The main executable
 include_directories(src)
 add_executable(main
-        src/cpp/textures_practice.cpp
         src/cpp/shader.cpp
         src/cpp/texture.cpp
         src/cpp/camera.cpp
+        src/cpp/cube.cpp
         )
 set_property(TARGET main PROPERTY CXX_STANDARD 11)
 target_compile_options(main PRIVATE -Wall)
