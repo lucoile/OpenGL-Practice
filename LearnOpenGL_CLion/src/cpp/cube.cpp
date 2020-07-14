@@ -21,8 +21,9 @@
 #include "hpp/camera.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window, Shader shaderProgram, Camera camera, float frametime);
-
+void processInput(GLFWwindow *window);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 // variables
 const unsigned int SCR_WIDTH = 800;
@@ -31,7 +32,15 @@ glm::mat4 movementMatrix = glm::mat4(1.0f);
 glm::vec2 rotation = glm::vec2(0.0f);;
 glm::vec3 direction = glm::vec3(0.0f);
 
+// camera
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
+bool firstMouse = true;
 
+// timing
+float deltaTime = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f;
 
 int main(int argc, const char * argv[]) {
     // Initialize GLFW
@@ -50,6 +59,12 @@ int main(int argc, const char * argv[]) {
         return -1;
     }
     glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+
+    // tell GLFW to capture our mouse
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Register framebuffer_size_callback function with window resizing
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -70,21 +85,9 @@ int main(int argc, const char * argv[]) {
     glDepthFunc(GL_LESS);
 
     // ------------------------------------- //
-    // Variables
-    const float rotationSpeed = 5.0f;
-    float angle = 45.0f;
-    float lastFrameTime = glfwGetTime();
-
-
-
-    // ------------------------------------- //
     // Shader
     Shader shaderProgram("src/shaders/cube.vert", "src/shaders/cube.frag");
 
-
-    // ------------------------------------- //
-    // Camera
-    Camera camera;
 
     // ------------------------------------- //
     // Calculate MVP
@@ -99,7 +102,6 @@ int main(int argc, const char * argv[]) {
     glm::mat4 Model = glm::mat4(1.0f);
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
-
 
     // ------------------------------------- //
     // Vertex inputs
@@ -184,6 +186,19 @@ int main(int argc, const char * argv[]) {
             0.982f,  0.099f,  0.879f
     };
 
+    glm::vec3 cubePositions[] = {
+            glm::vec3( 0.0f,  0.0f,  0.0f),
+            glm::vec3( 2.0f,  5.0f, -15.0f),
+            glm::vec3(-1.5f, -2.2f, -2.5f),
+            glm::vec3(-3.8f, -2.0f, -12.3f),
+            glm::vec3( 2.4f, -0.4f, -3.5f),
+            glm::vec3(-1.7f,  3.0f, -7.5f),
+            glm::vec3( 1.3f, -2.0f, -2.5f),
+            glm::vec3( 1.5f,  2.0f, -2.5f),
+            glm::vec3( 1.5f,  0.2f, -1.5f),
+            glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
 
     // ------------------------------------- //
     // Initialize Vertex Buffer Object, Vertex Array Object
@@ -221,29 +236,46 @@ int main(int argc, const char * argv[]) {
     while(!glfwWindowShouldClose(window))
     {
         // Get frame time
-        float dt = glfwGetTime() - lastFrameTime;
-        lastFrameTime += dt;
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
 
         // Process input
-        processInput(window, shaderProgram, camera, lastFrameTime);
+        processInput(window);
 
         // Rendering commands
         // Clear color
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // State setting function
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);           // State using function
 
+        // Calculate MVP
+        View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+        Projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
+
         // Render
         shaderProgram.use();
         shaderProgram.setMat4("MVP", MVP);
 
-        // Draw cube
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 12*3);
+        // camera/view transformation
+        glm::mat4 View = camera.GetViewMatrix();
+
+        // Draw cubes
+        for(unsigned int i = 0; i < 10; i++)
+        {
+            Model = glm::translate(glm::mat4(1.0f), cubePositions[i]);
+            float angle = 20.0f * (i+1);
+            Model = glm::rotate(Model, glm::radians(angle), glm::vec3(1.0f, 1.0f, 0.5f));
+            glm::mat4 MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
+
+            shaderProgram.setMat4("MVP", MVP);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
 
         // Check for event triggers and swap buffers
-        glfwPollEvents();
         glfwSwapBuffers(window);
+        glfwPollEvents();
     }
 
     // De-allocate resources
@@ -266,10 +298,49 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 
 // Function to process input
-void processInput(GLFWwindow* window, Shader shaderProgram, Camera camera, float frametime)
+void processInput(GLFWwindow *window)
 {
-    // Close the window when user presses escape
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.process_keyboard_input(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.process_keyboard_input(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.process_keyboard_input(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.process_keyboard_input(RIGHT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+        camera.process_keyboard_input(UP, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        camera.process_keyboard_input(DOWN, deltaTime);
 }
+
+// glfw: whenever the mouse moves, this callback is called
+// -------------------------------------------------------
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.process_mouse_movement(xoffset, yoffset);
+}
+
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// ----------------------------------------------------------------------
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
+    camera.process_mouse_scroll(yoffset);
+}
+
 
