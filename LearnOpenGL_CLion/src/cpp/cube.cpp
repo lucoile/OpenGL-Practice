@@ -271,6 +271,10 @@ int main(int argc, const char * argv[]) {
         View = camera.GetViewMatrix();
         Projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
 
+        // Update light position
+        lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
+        lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
+
         // Render light
         lightShader.use();
         Model = glm::translate(glm::mat4(1.0f), lightPos);
