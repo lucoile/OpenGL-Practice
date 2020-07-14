@@ -31,6 +31,7 @@ const unsigned int SCR_HEIGHT = 600;
 glm::mat4 movementMatrix = glm::mat4(1.0f);
 glm::vec2 rotation = glm::vec2(0.0f);;
 glm::vec3 direction = glm::vec3(0.0f);
+glm::vec3 lightPos(3.0f, 1.0f, 2.0f);
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -87,6 +88,7 @@ int main(int argc, const char * argv[]) {
     // ------------------------------------- //
     // Shader
     Shader shaderProgram("src/shaders/cube.vert", "src/shaders/cube.frag");
+    Shader lightShader("src/shaders/cube.vert", "src/shaders/light.frag");
 
 
     // ------------------------------------- //
@@ -224,14 +226,24 @@ int main(int argc, const char * argv[]) {
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    // texture attribute
+    glEnableVertexAttribArray(0);
+
+    // ------------------------------------- //
+    // Light source
+    unsigned int lightVAO, lightVBO;
+    glGenBuffers(1, &lightVBO);
+    glGenVertexArrays(1, &lightVAO);
+    glBindVertexArray(lightVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
 
     // ------------------------------------- //
     // Render loop
-    //Activate shaders
-    shaderProgram.use();
-
     // Check if window has been instructed to close
     while(!glfwWindowShouldClose(window))
     {
@@ -249,29 +261,40 @@ int main(int argc, const char * argv[]) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);           // State using function
 
         // Calculate MVP
-        View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+        // camera/view transformation
+        View = camera.GetViewMatrix();
         Projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
 
-        // Render
+        // Render light
+        lightShader.use();
+        Model = glm::translate(glm::mat4(1.0f), lightPos);
+        Model = glm::scale(Model, glm::vec3(0.2f));
+        MVP = Projection * View * Model;
+        lightShader.setMat4("MVP", MVP);
+
+        glBindVertexArray(lightVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+
+        // Render cubes
         shaderProgram.use();
         shaderProgram.setMat4("MVP", MVP);
-
-        // camera/view transformation
-        glm::mat4 View = camera.GetViewMatrix();
+        shaderProgram.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 
         // Draw cubes
+        glBindVertexArray(VAO);
         for(unsigned int i = 0; i < 10; i++)
         {
             Model = glm::translate(glm::mat4(1.0f), cubePositions[i]);
             float angle = 20.0f * (i+1);
             Model = glm::rotate(Model, glm::radians(angle), glm::vec3(1.0f, 1.0f, 0.5f));
-            glm::mat4 MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
+            MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
 
             shaderProgram.setMat4("MVP", MVP);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
-
+        glBindVertexArray(0);
 
         // Check for event triggers and swap buffers
         glfwSwapBuffers(window);
@@ -312,9 +335,9 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.process_keyboard_input(RIGHT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-        camera.process_keyboard_input(UP, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
         camera.process_keyboard_input(DOWN, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        camera.process_keyboard_input(UP, deltaTime);
 }
 
 // glfw: whenever the mouse moves, this callback is called
