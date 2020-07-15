@@ -293,6 +293,24 @@ int main(int argc, const char * argv[]) {
         shaderProgram.setVec3("lightPos", lightPos);
         shaderProgram.setVec3("viewPos", camera.Position);
 
+        // Set light and material
+        glm::vec3 lightColor;
+        lightColor.x = sin(glfwGetTime()/2.0f * 2.0f);
+        lightColor.y = sin(glfwGetTime()/2.0f * 0.7f);
+        lightColor.z = sin(glfwGetTime()/2.0f * 1.3f);
+
+        glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f);
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+        shaderProgram.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+        shaderProgram.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+        shaderProgram.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+        shaderProgram.setFloat("material.shininess", 32.0f);
+
+        shaderProgram.setVec3("light.ambient", ambientColor);
+        shaderProgram.setVec3("light.diffuse", diffuseColor);
+        shaderProgram.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
         // Draw cubes
         glBindVertexArray(VAO);
         for(unsigned int i = 0; i < 10; i++)
