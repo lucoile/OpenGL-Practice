@@ -4,7 +4,7 @@
 //
 //  Created by Thomas Buffard on 7/1/20.
 //
-/*
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/ext.hpp>
@@ -320,4 +320,3 @@ void processInput(GLFWwindow* window, Shader shaderProgram, Camera camera, float
     //direction = glm::vec3(0.0f);
 }
 
-*/
