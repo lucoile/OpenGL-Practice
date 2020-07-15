@@ -216,11 +216,6 @@ int main(int argc, const char * argv[]) {
 
 
     // ------------------------------------- //
-    // Model
-    Model backpack("src/models/backpack/backpack.obj");
-
-
-    // ------------------------------------- //
     // Render loop
     // Check if window has been instructed to close
     while(!glfwWindowShouldClose(window))

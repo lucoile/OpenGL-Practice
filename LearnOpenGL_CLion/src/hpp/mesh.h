@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 
-#include "shader_m.h"
+#include "hpp/shader.h"
 
 #include <string>
 #include <vector>
@@ -15,7 +15,7 @@
 struct Vertex {
     glm::vec3 Position;
     glm::vec3 Normal;
-    glm::vec3 TexCoords;
+    glm::vec2 TexCoords;
 };
 
 struct Texture {

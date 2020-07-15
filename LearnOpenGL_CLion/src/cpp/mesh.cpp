@@ -21,8 +21,8 @@ void Mesh::Draw(Shader &shader)
     {
         glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
         // retrieve texture number (the N in diffuse_textureN)
-        string number;
-        string name = textures[i].type;
+        std::string number;
+        std::string name = textures[i].type;
         if(name == "texture_diffuse")
             number = std::to_string(diffuseNr++);
         else if(name == "texture_specular")

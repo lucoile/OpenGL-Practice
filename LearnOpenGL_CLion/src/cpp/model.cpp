@@ -3,9 +3,9 @@
 //
 
 #include "hpp/model.h"
-#include "stb_image.h"
+#include "stb/stb_image.h"
 
-Model::Model(char *path)
+Model::Model(std::string const path)
 {
     loadModel(path);
 }
@@ -24,7 +24,7 @@ void Model::loadModel(std::string path)
     // check for errors
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
     {
-        cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+        std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
         return;
     }
     // retrieve the directory path of the filepath
@@ -147,7 +147,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType 
     return textures;
 }
 
-unsigned int Model::TextureFromFile(const char *path, const std::string &directory, bool gamma)
+unsigned int Model::TextureFromFile(const char *path, const std::string &directory)
 {
     std::string filename = std::string(path);
     filename = directory + '/' + filename;

@@ -8,7 +8,7 @@ add_executable(main
         src/cpp/shader.cpp
         src/cpp/texture.cpp
         src/cpp/camera.cpp
-        src/cpp/cube.cpp
+        src/cpp/model_test.cpp
         src/cpp/mesh.cpp
         src/cpp/model.cpp
         )
@@ -42,3 +42,7 @@ target_link_libraries(main PRIVATE glfw)
 # glm
 add_subdirectory(lib/glm EXCLUDE_FROM_ALL)
 target_link_libraries(main PRIVATE glm)
+
+## assimp
+add_subdirectory(lib/assimp-5.0.1 EXCLUDE_FROM_ALL)
+target_link_libraries(main PRIVATE assimp)
