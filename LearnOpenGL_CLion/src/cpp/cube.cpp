@@ -19,6 +19,7 @@
 #include "stb/stb_image.h"
 #include "hpp/texture.h"
 #include "hpp/camera.h"
+#include "hpp/model.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -203,6 +204,7 @@ int main(int argc, const char * argv[]) {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+
     // ------------------------------------- //
     // Load textures
     Texture diffuseMap("src/textures/container2.png");
@@ -211,6 +213,12 @@ int main(int argc, const char * argv[]) {
     shaderProgram.use();
     shaderProgram.setInt("material.diffuse", 0);
     shaderProgram.setInt("material.specular", 1);
+
+
+    // ------------------------------------- //
+    // Model
+    Model backpack("src/models/backpack/backpack.obj");
+
 
     // ------------------------------------- //
     // Render loop

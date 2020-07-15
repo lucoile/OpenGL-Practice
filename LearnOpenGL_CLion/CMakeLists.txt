@@ -9,6 +9,8 @@ add_executable(main
         src/cpp/texture.cpp
         src/cpp/camera.cpp
         src/cpp/cube.cpp
+        src/cpp/mesh.cpp
+        src/cpp/model.cpp
         )
 set_property(TARGET main PROPERTY CXX_STANDARD 11)
 target_compile_options(main PRIVATE -Wall)

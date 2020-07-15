@@ -1,0 +1,32 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/thomas/Downloads/assimp-5.0.1
+-- The C compiler identification is AppleClang 11.0.3.11030032
+-- The CXX compiler identification is AppleClang 11.0.3.11030032
+-- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
+-- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
+-- Check for working CXX compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Shared libraries enabled
+-- Looking for ZLIB...
+-- Found PkgConfig: /usr/local/bin/pkg-config (found version "0.29.2") 
+-- Checking for module 'zzip-zlib-config'
+--   No package 'zzip-zlib-config' found
+-- Found ZLIB: optimized;/usr/lib/libz.dylib;debug;/usr/lib/libz.dylib
+-- Checking for module 'minizip'
+--   No package 'minizip' found
+-- Could NOT find rt (missing: RT_LIBRARY) 
+INFO Hunter enabled or RT-extension not found. glTF import/export will be built without Open3DGC-compression.
+-- Enabled importer formats: AMF 3DS AC ASE ASSBIN B3D BVH COLLADA DXF CSM HMP IRRMESH IRR LWO LWS MD2 MD3 MD5 MDC MDL NFF NDO OFF OBJ OGRE OPENGEX PLY MS3D COB BLEND IFC XGL FBX Q3D Q3BSP RAW SIB SMD STL TERRAGEN 3D X X3D GLTF 3MF MMD STEP
+-- Disabled importer formats:
+-- Enabled exporter formats: 3DS ASSBIN ASSXML COLLADA OBJ OPENGEX PLY FBX STL X X3D GLTF 3MF ASSJSON STEP
+-- Disabled exporter formats:
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/thomas/Downloads/assimp-5.0.1/cmake-build-debug
