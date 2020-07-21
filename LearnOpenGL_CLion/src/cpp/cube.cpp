@@ -91,12 +91,15 @@ int main(int argc, const char * argv[]) {
 	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
+	// Enable blending
+	glEnable(GL_BLEND);
+
 	// ------------------------------------- //
     // Shader
     Shader shaderProgram("src/shaders/cube.vert", "src/shaders/cube.frag");
     Shader lightShader("src/shaders/light.vert", "src/shaders/light.frag");
 	Shader outlineShader("src/shaders/cube.vert", "src/shaders/border.frag");
-
+	Shader windowShader("src/shaders/windowShader.vert", "src/shaders/windowShader.frag");
 
     // ------------------------------------- //
     // Calculate MVP
@@ -162,7 +165,6 @@ int main(int argc, const char * argv[]) {
     };
 
     glm::vec3 cubePositions[] = {
-            glm::vec3( 0.0f,  0.0f,  0.0f),
             glm::vec3( 2.0f,  5.0f, -15.0f),
             glm::vec3(-1.5f, -2.2f, -2.5f),
             glm::vec3(-3.8f, -2.0f, -12.3f),
@@ -173,6 +175,15 @@ int main(int argc, const char * argv[]) {
             glm::vec3( 1.5f,  0.2f, -1.5f),
             glm::vec3(-1.3f,  1.0f, -1.5f)
     };
+
+    float windowVerts[] = {
+			0.0f, 0.0f, 0.0f, 0.0f, 0.407f, 0.478f, 0.0f, 0.0f,
+			1.0f, 0.0f, 0.0f, 0.0f, 0.407f, 0.478f, 1.0f, 0.0f,
+			0.0f, 1.0f, 0.0f, 0.0f, 0.407f, 0.478f, 0.0f, 1.0f,
+			1.0f, 1.0f, 0.0f, 0.0f, 0.407f, 0.478f, 1.0f, 1.0f
+    };
+
+	unsigned int windowIndices[] = {0, 2, 3, 3, 1, 0};
 
 
     // ------------------------------------- //
@@ -185,7 +196,6 @@ int main(int argc, const char * argv[]) {
     // Bind VBO and copy vertices into vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
-    // Bind EBO and copy indices into element buffer
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -210,11 +220,35 @@ int main(int argc, const char * argv[]) {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    // Pane
+	unsigned int planeVBO, planeVAO, planeEBO;
+	glGenBuffers(1, &planeVBO);
+	glGenBuffers(1, &planeEBO);
+	glGenVertexArrays(1, &planeVAO);
+	// Bind VAO
+	glBindVertexArray(planeVAO);
+	// Bind VBO and copy vertices into vertex buffer
+	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(windowVerts), windowVerts, GL_STATIC_DRAW);
+	// Bind EBO and copy indices into element buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, planeEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(windowIndices), windowIndices, GL_STATIC_DRAW);
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coordinates attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6*sizeof(float)));
+	glEnableVertexAttribArray(2);
+
 
     // ------------------------------------- //
     // Load textures
     Texture diffuseMap("src/textures/container2.png");
     Texture specularMap("src/textures/container2_specular.png");
+    Texture windowTex("src/textures/blending_transparent_window.png");
 
     shaderProgram.use();
     shaderProgram.setInt("material.diffuse", 0);
@@ -248,7 +282,10 @@ int main(int argc, const char * argv[]) {
         lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
         lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
 
-        // Render light
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+		// Render light
         lightShader.use();
         Model = glm::translate(glm::mat4(1.0f), lightPos);
         Model = glm::scale(Model, glm::vec3(0.2f));
@@ -336,6 +373,21 @@ int main(int argc, const char * argv[]) {
 		glStencilMask(0xFF);
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		glEnable(GL_DEPTH_TEST);
+
+		// Draw window
+		windowShader.use();
+		glActiveTexture(GL_TEXTURE2);
+		glEnable(GL_TEXTURE_2D);
+		windowTex.bind();
+		windowShader.setInt("texture2", 2);
+
+		Model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		MVP = Projection * View * Model;
+		windowShader.setMat4("MVP", MVP);
+
+		glBindVertexArray(planeVAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 
 		// Check for event triggers and swap buffers
         glfwSwapBuffers(window);
