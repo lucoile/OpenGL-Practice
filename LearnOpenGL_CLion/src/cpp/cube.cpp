@@ -19,7 +19,7 @@
 #include "stb/stb_image.h"
 #include "hpp/texture.h"
 #include "hpp/camera.h"
-#include "hpp/model.h"
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -86,10 +86,16 @@ int main(int argc, const char * argv[]) {
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
 
-    // ------------------------------------- //
+    // Enable stencil test
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	// ------------------------------------- //
     // Shader
     Shader shaderProgram("src/shaders/cube.vert", "src/shaders/cube.frag");
     Shader lightShader("src/shaders/light.vert", "src/shaders/light.frag");
+	Shader outlineShader("src/shaders/cube.vert", "src/shaders/border.frag");
 
 
     // ------------------------------------- //
@@ -230,8 +236,8 @@ int main(int argc, const char * argv[]) {
 
         // Rendering commands
         // Clear color
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // State setting function
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);           // State using function
+        glClearColor(0.4f, 0.4f, 0.4f, 1.0f);   // State setting function
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );           // State using function
 
         // Calculate MVP
         // camera/view transformation
@@ -254,7 +260,11 @@ int main(int argc, const char * argv[]) {
         glBindVertexArray(0);
 
         // Render cubes
-        shaderProgram.use();
+        // Write to the stencil buffer when rendering cubes
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilMask(0xFF);
+
+		shaderProgram.use();
         shaderProgram.setMat4("MVP", MVP);
         shaderProgram.setVec3("viewPos", camera.Position);
 
@@ -293,14 +303,41 @@ int main(int argc, const char * argv[]) {
             Model = glm::rotate(Model, glm::radians(angle), glm::vec3(1.0f, 1.0f, 0.5f));
             MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
 
-            shaderProgram.setMat4("MVP", MVP);
-            shaderProgram.setMat4("model", Model);
+			shaderProgram.setMat4("MVP", MVP);
+			shaderProgram.setMat4("model", Model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
         glBindVertexArray(0);
 
-        // Check for event triggers and swap buffers
+		// Draw outlines
+		// Set stencil buffer options
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		glStencilMask(0x00); // disable writing to the stencil buffer
+		glDisable(GL_DEPTH_TEST);
+
+		outlineShader.use();
+		glBindVertexArray(VAO);
+		for(unsigned int i = 0; i < 10; i++)
+		{
+			Model = glm::translate(glm::mat4(1.0f), cubePositions[i]);
+			Model = glm::scale(Model, glm::vec3(1.1f, 1.1f, 1.1f));
+			float angle = 20.0f * (i+1);
+			Model = glm::rotate(Model, glm::radians(angle), glm::vec3(1.0f, 1.0f, 0.5f));
+			MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
+
+			outlineShader.setMat4("MVP", MVP);
+			outlineShader.setMat4("model", Model);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+		glBindVertexArray(0);
+
+		glStencilMask(0xFF);
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glEnable(GL_DEPTH_TEST);
+
+		// Check for event triggers and swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
