@@ -26,6 +26,7 @@ void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void renderScene(const Shader shader);
+void renderLight(const Shader lightShader);
 
 // variables
 const unsigned int SCR_WIDTH = 800;
@@ -230,6 +231,7 @@ int main(int argc, const char * argv[]) {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		renderScene(shadowShader);
+		renderLight(lightShader);
 
 		// Reset framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -248,8 +250,6 @@ int main(int argc, const char * argv[]) {
 
 unsigned int cubeVAO = 0;
 unsigned int cubeVBO = 0;
-unsigned int lightVAO = 0;
-unsigned int lightVBO = 0;
 float cube_vertex_data[] = {
 		// Cube
 		// positions          // normals           // texture coords
@@ -329,32 +329,6 @@ void renderScene(const Shader shader)
 		glEnableVertexAttribArray(2);
 	}
 
-	// set up light VAO, VBO
-	if(lightVAO == 0)
-	{
-		// Light source
-		glGenBuffers(1, &lightVBO);
-		glGenVertexArrays(1, &lightVAO);
-		glBindVertexArray(lightVAO);
-
-		glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertex_data), cube_vertex_data, GL_STATIC_DRAW);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-	}
-
-//	// Render light
-//	lightShader.use();
-//	Model = glm::translate(glm::mat4(1.0f), lightPos);
-//	Model = glm::scale(Model, glm::vec3(0.2f));
-//	MVP = Projection * View * Model;
-//	lightShader.setMat4("MVP", MVP);
-//
-//	glBindVertexArray(lightVAO);
-//	glDrawArrays(GL_TRIANGLES, 0, 36);
-//	glBindVertexArray(0);
-
 	// Draw cubes
 	glBindVertexArray(cubeVAO);
 	for(unsigned int i = 0; i < 10; i++)
@@ -373,6 +347,36 @@ void renderScene(const Shader shader)
 
 }
 
+unsigned int lightVAO = 0;
+unsigned int lightVBO = 0;
+void renderLight(Shader lightShader)
+{
+	// set up light VAO, VBO
+	if(lightVAO == 0)
+	{
+		// Light source
+		glGenBuffers(1, &lightVBO);
+		glGenVertexArrays(1, &lightVAO);
+		glBindVertexArray(lightVAO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertex_data), cube_vertex_data, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+	}
+
+	// Render light
+	lightShader.use();
+	Model = glm::translate(glm::mat4(1.0f), lightPos);
+	Model = glm::scale(Model, glm::vec3(0.2f));
+	MVP = Projection * View * Model;
+	lightShader.setMat4("MVP", MVP);
+
+	glBindVertexArray(lightVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+}
 
 // Function called when the window is resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -427,6 +431,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
 	camera.process_mouse_scroll(yoffset);
 }
+
+
 
 
 
