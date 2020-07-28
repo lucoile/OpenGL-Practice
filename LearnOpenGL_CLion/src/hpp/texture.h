@@ -16,6 +16,8 @@
 class Texture
 {
 public:
+	GLuint m_texture;
+
     Texture(const std::string& fileName);
     
     void bind();
@@ -25,8 +27,6 @@ public:
 private:
     Texture(const Texture& texture) {}
     void operator=(const Texture& texture) {}
-
-    GLuint m_texture;
 };
 
 #endif /* texture_h */

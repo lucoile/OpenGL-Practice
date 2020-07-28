@@ -8,7 +8,7 @@ add_executable(main
         src/cpp/shader.cpp
         src/cpp/texture.cpp
         src/cpp/camera.cpp
-        src/cpp/cube.cpp
+        src/cpp/shadows.cpp
         src/cpp/mesh.cpp
         src/cpp/model.cpp
         )
