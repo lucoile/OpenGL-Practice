@@ -1,0 +1,48 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# CMake files
+/cmake-build-debug/
+/cmake-build-default/
+
+# Mac .DS_Store files
+.DS_Store
+
+# CLion settings
+/.idea
+
+# Python interpreter
+/venv
+
+# Assimp
+/lib/assimp-5.0.1/
